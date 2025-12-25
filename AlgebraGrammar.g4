@@ -1,7 +1,6 @@
-grammar AlgebraGrammar; // Имя грамматики должно совпадать с именем файла
+grammar AlgebraGrammar;
 
-// ЛЕКСИЧЕСКИЕ ПРАВИЛА (LEXER RULES) - ЗАДАНИЕ ЛР1
-// Они описывают из каких символов состоят токены
+// ЛЕКСИЧЕСКИЕ ПРАВИЛА
 NUMBER    : [0-9]+;
 VARIABLE  : [a-zA-Z];
 PLUS      : '+';
@@ -12,12 +11,27 @@ POW       : '^';
 LPAREN    : '(';
 RPAREN    : ')';
 EQ        : '=';
-WS        : [ \t\r\n]+ -> skip; // Пробельные символы игнорируем
+WS        : [ \t\r\n]+ -> skip;
 
-// СИНТАКСИЧЕСКИЕ ПРАВИЛА (PARSER RULES)
-// Они описывают структуру выражений (это понадобится в ЛР2)
-expression  : term ( (PLUS | MINUS) term )*;
-term        : factor ( (MUL | DIV) factor )*;
-factor      : base (POW base)?;
-base        : NUMBER | VARIABLE | LPAREN expression RPAREN;
-equation    : expression EQ expression;
+// ПРАВИЛА ПАРСЕРА с правильным приоритетом
+// expression : term ( (PLUS | MINUS) term )* ;    // Уровень 1: + -
+// term       : factor ( (MUL | DIV) factor )* ;   // Уровень 2: * /
+// factor     : base (POW base)? ;                 // Уровень 3: ^
+// base       : NUMBER | VARIABLE | LPAREN expression RPAREN ;
+
+// Более наглядный вариант с явными правилами
+start      : equation EOF | expression EOF;
+
+equation   : expression EQ expression;
+
+expression : term ( (PLUS | MINUS) term )*;
+
+term       : factor ( (MUL | DIV) factor )*;
+
+factor     : base (POW base)?;
+
+base       : NUMBER
+           | VARIABLE
+           | LPAREN expression RPAREN
+           | (PLUS | MINUS) base // Унарные + и -
+           ;
