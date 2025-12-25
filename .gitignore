@@ -1,0 +1,27 @@
+# ANTLR сгенерированные файлы
+AlgebraGrammarLexer.py
+AlgebraGrammarParser.py
+AlgebraGrammarListener.py
+*.tokens
+*.interp
+
+# Python кэш
+__pycache__/
+*.pyc
+*.pyo
+
+# Виртуальные окружения
+venv/
+.venv/
+env/
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Временные файлы
+*.log
+*.tmp
+
+# ANTLR JAR файл
+antlr-*.jar
